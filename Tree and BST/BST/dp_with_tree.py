@@ -106,9 +106,67 @@ def getMoneyAmount(n: int) -> int:
     
     return solveMem(memo, 1, n), solveTab(n)
 
-n = 69
-money = getMoneyAmount(n)
-print(money)
+# n = 69
+# money = getMoneyAmount(n)
+# print(money)
+#####################################################################################################################################
+## **1130. Minimum Cost Tree From Leaf Values**
+
+def mctFromLeafValues(arr: list[int]) -> int:
+    n = len(arr)
+    
+    ## initializing a dict to have the access of the maximum
+    mx_mp = {}
+    
+    for i in range(n):
+        mx_mp[(i, i)] = arr[i]
+        for j in range(i+1, n):
+            mx_mp[(i, j)] = max(arr[j], mx_mp[(i, j-1)])
+    
+    def solveMem(memo, left, right):
+        ## base cases
+        if left >= right:
+            return 0
+        
+        ## check if the state is already computed
+        if memo[left][right] is not None:
+            return memo[left][right]
+        
+        ans = math.inf
+        for i in range(left, right):
+            ans = min(ans, ( (mx_mp[(left, i)] * mx_mp[((i+1), right)]) + solveMem(memo, left, i) + solveMem(memo, i+1, right)) )
+        
+        ## store the computed state
+        memo[left][right] = ans
+        
+        return memo[left][right]
+    
+    
+    def solveTab(n):
+        ## initializing the dp array
+        dp = [[0]*(n+1) for _ in range(n+1)]
+        
+        for left in range(n-1, -1, -1):
+            for right in range(left, n):
+                if left == right:
+                    continue
+                else:
+                    ans = math.inf
+                    for i in range(left, right):
+                        ans = min(ans, (mx_mp.get((left, i), 0)) * mx_mp.get((i+1, right), 0) + dp[left][i] + dp[i+1][right])
+                    
+                    dp[left][right] = ans
+        
+        return dp[0][n-1]
+    
+    ## initializing the memo array of nXn
+    memo = [[None]*n for _ in range(n)]
+    
+    return solveMem(memo, 0, n-1), solveTab(n)
+
+arr = [6, 2, 4]
+res = mctFromLeafValues(arr)
+print(res)
 
 
 
