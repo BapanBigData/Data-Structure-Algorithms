@@ -226,7 +226,7 @@ def buySellStockIV(prices: list[int], k: int) -> int:
     
     
     def solveTab(n, k):
-        ## initializing the dp array of shape n X buy X limit
+        ## initializing the dp array of shape n X buy X k
         dp = [[[0]*(k+1) for _ in range(2)] for _ in range(n+1)]
         
         for i in range(n-1, -1, -1):
