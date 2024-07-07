@@ -75,9 +75,9 @@ def maxSubArrayLength(nums: list[int]):
     return indx_start, indx_end
 
 
-nums = [-2, 1, -3, 4, -1, 2, 1, -5, 4]
-indx = maxSubArrayLength(nums)
-print(indx)
+# nums = [-2, 1, -3, 4, -1, 2, 1, -5, 4]
+# indx = maxSubArrayLength(nums)
+# print(indx)
 ###########################################################################
 ## **Valid Parentheses**
 
@@ -131,6 +131,58 @@ def fib(n: int):
     
     return dp
 
-n = 1
-series = fib(n)
-print(series)
+# n = 1
+# series = fib(n)
+# print(series)
+####################################################################################################
+## **227. Basic Calculator II**
+## Given a string s which represents an expression, evaluate this expression and return its value. 
+## Note: The integer division should truncate toward zero.
+def calculate(s: str) -> int:
+    ## initializing a stack
+    stack = []
+    
+    n = len(s)
+    operator = '+'
+    
+    i = 0
+    while i < n:
+        ch = s[i]
+        
+        if ch.isdigit():
+            
+            val = 0
+            while (i < n) and (s[i].isdigit()):
+                val = (val*10) + int(s[i])
+                i += 1
+            
+            i -= 1   ## adjust the index to avoid skipping characters
+            
+            if operator == '+':
+                stack.append(val)
+            
+            elif operator == '-':
+                stack.append(-val)
+            
+            elif operator == '*':
+                x = stack.pop()
+                stack.append(x*val)
+            
+            elif operator == '/':
+                x = stack.pop()
+                stack.append(int(x / val))  # `int()` Truncation towards Zero 
+            
+        elif ch != ' ':
+            operator = ch
+        
+        i += 1
+    
+    res = 0
+    while stack:
+        res += stack.pop()
+    
+    return res
+
+
+s = " 31 + 22 * 4 / 3 - 2 / 2 - 1 * 3 "
+print(calculate(s))
