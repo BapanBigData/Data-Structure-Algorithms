@@ -246,9 +246,115 @@ def minDistance(word1: str, word2: str) -> int:
     return solveMem(memo, 0, 0), solveTab(n1, n2), spaceOpt(n1, n2)
 
 
-word1 = "intention"; word2 = "execution"
-dist = minDistance(word1, word2)
-print(dist)
+# word1 = "intention"; word2 = "execution"
+# dist = minDistance(word1, word2)
+# print(dist)
+###############################################################################################################################
+## **44. Wildcard Matching**
+## 
+def isMatch(s: str, p: str) -> bool:
+    n1, n2 = len(s), len(p)
+    
+    def solveMem(memo, i, j):
+        ## base cases
+        if (i >= n1) and (j >= n2):
+            return True
+        
+        if (j >= n2) and (i < n1):
+            return False
+        
+        if (i >= n1) and (j < n2):
+            for k in range(j, n2):
+                if p[k] != '*':
+                    return False
+            return True
+        
+        ## check if the state is already computed
+        if memo[i][j] != -1:
+            return memo[i][j]
+        
+        
+        if (s[i] == p[j]) or (p[j] == '?'):
+            memo[i][j] = solveMem(memo, i+1, j+1)
+            return memo[i][j]
+        elif p[j] == '*':
+            memo[i][j] = solveMem(memo, i, j+1) or solveMem(memo, i+1, j)
+            return memo[i][j]
+        else:
+            memo[i][j] = False
+            return memo[i][j]
+    
+    
+    def solveTab(n1, n2):
+        ## let's initialize the dp array
+        dp = [[-1]*(n2+1) for _ in range(n1+1)]
+        
+        ## base case filling
+        dp[n1][n2] = True
+        
+        for i in range(n1):
+            dp[i][n2] = False
+        
+        for j in range(n2):
+            flag = True
+            for k in range(j, n2):
+                if p[k] != '*':
+                    flag = False
+                    break
+            dp[n1][j] = flag
+        
+        for i in range(n1-1, -1, -1):
+            for j in range(n2-1, -1, -1):
+                
+                if (s[i] == p[j]) or (p[j] == '?'):
+                    dp[i][j] = dp[i+1][j+1]
+                elif p[j] == '*':
+                    dp[i][j] = dp[i][j+1] or dp[i+1][j]
+                else:
+                    dp[i][j] = False
+        
+        return dp[0][0]
+    
+    
+    def spaceOpt(n1, n2):
+        ## initializing 2 rows prev and curr
+        prev = [False]*(n2+1)
+        curr = [False]*(n2+1)
+        
+        ## base cases
+        prev[-1] = True
+        
+        for j in range(n2):
+            flag = True
+            for k in range(j, n2):
+                if p[k] != '*':
+                    flag = False
+                    break
+            prev[j] = flag
+        
+        for i in range(n1-1, -1, -1):
+            for j in range(n2-1, -1, -1):
+                
+                if (s[i] == p[j]) or (p[j] == '?'):
+                    curr[j] = prev[j+1]
+                elif p[j] == '*':
+                    curr[j] = curr[j+1] or prev[j]
+                else:
+                    curr[j] = False
+            
+            prev = curr[:]
+        
+        return prev[0]
+    
+    ## let's initialize the memo array
+    memo = [[-1]*n2 for _ in range(n1)]
+    
+    return solveMem(memo, 0, 0), solveTab(n1, n2), spaceOpt(n1, n2)
+
+
+s = "abcde"; p = "a*c?e"
+matches = isMatch(s, p)
+print(matches)
 
 
 
