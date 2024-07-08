@@ -184,5 +184,38 @@ def calculate(s: str) -> int:
     return res
 
 
-s = " 31 + 22 * 4 / 3 - 2 / 2 - 1 * 3 "
-print(calculate(s))
+# s = " 31 + 22 * 4 / 3 - 2 / 2 - 1 * 3 "
+# print(calculate(s))
+##################################################################################################################
+## Armstrong Number
+def armstrongNumber(n: int):
+    
+    def solver():
+        n_str = str(n)
+        res = 0
+        k = len(n_str)
+        
+        for i in range(k):
+            res += int(n_str[i]) ** k
+        
+        return res == n
+    
+    def solver1():
+        digit = n
+        n_str = str(n)
+        k = len(n_str)
+        res = 0
+        
+        while digit > 0:
+            r = digit % 10
+            res += r ** k
+            
+            digit = digit // 10
+        
+        return res == n
+    
+    return solver(), solver1()
+
+
+armstrong = armstrongNumber(10241024)
+print(armstrong)
