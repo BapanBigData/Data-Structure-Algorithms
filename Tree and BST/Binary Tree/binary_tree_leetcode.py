@@ -64,17 +64,17 @@ def isSameTree(p: TreeNode, q: TreeNode) -> bool:
     return lt and rt
 
 
-p = TreeNode(1)
-p.left = TreeNode(2)
-p.right = TreeNode(3)
-p.right.left = TreeNode(5)
+# p = TreeNode(1)
+# p.left = TreeNode(2)
+# p.right = TreeNode(3)
+# p.right.left = TreeNode(5)
 
-q = TreeNode(1)
-q.left = TreeNode(2)
-q.right = TreeNode(3)
-q.right.left = TreeNode(5)
+# q = TreeNode(1)
+# q.left = TreeNode(2)
+# q.right = TreeNode(3)
+# q.right.left = TreeNode(5)
 
-print(isSameTree(p, q))
+# print(isSameTree(p, q))
 #########################################################################################################################
 ## **101. Symmetric Tree**
 ## Given the root of a binary tree, check whether it is a mirror of itself (i.e., symmetric around its center).
@@ -93,11 +93,11 @@ def isSymmetric(root: TreeNode) -> bool:
     return solver(root.left, root.right)
 
 
-p = TreeNode(1)
-p.left = TreeNode(2)
-p.right = TreeNode(2)
+# p = TreeNode(1)
+# p.left = TreeNode(2)
+# p.right = TreeNode(2)
 
-print(isSymmetric(p))
+# print(isSymmetric(p))
 ##########################################################################################################################
 ## **102. Binary Tree Level Order Traversal**
 def levelOrder(root: TreeNode) -> list[list[int]]:
@@ -241,9 +241,137 @@ def constructTreeFromPostorderInorder(inOrder: list[int], postOrder: list[int]) 
     return solver(0, n-1)
 
 
-inorder = [9, 3, 15, 20, 7]; postorder = [9, 15, 7, 20, 3]
-root = constructTreeFromPostorderInorder(inOrder=inorder, postOrder=postorder)
+# inorder = [9, 3, 15, 20, 7]; postorder = [9, 15, 7, 20, 3]
+# root = constructTreeFromPostorderInorder(inOrder=inorder, postOrder=postorder)
 
-inOrderTraversal(root)
-print()
-postOrderTraversal(root)
+# inOrderTraversal(root)
+# print()
+# postOrderTraversal(root)
+
+#####################################################################################################################
+## **112. Path Sum**
+## Given the root of a binary tree and an integer targetSum, return true if the tree has a root-to-leaf path such that adding up 
+## all the values along the path equals targetSum.
+
+def pathSumI(root: TreeNode, targetSum: int) -> bool:
+    
+    def solver(root, currSum):
+        ## base cases
+        if root is None:
+            return False
+        
+        currSum += root.val
+        
+        if root.left is None and root.right is None:
+            return currSum == targetSum
+        
+        left = solver(root.left, currSum)
+        right = solver(root.right, currSum)
+        
+        return left or right
+    
+    return solver(root, 0)
+##--------------------------------------------------------------------------------------------------------------
+## **113. Path Sum II**
+## Given the root of a binary tree and an integer targetSum, return all root-to-leaf paths where the sum of the node values in the path equals targetSum. 
+## Each path should be returned as a list of the node values, not node references.
+def pathSumII(root: TreeNode, targetSum: int) -> list[list[int]]:
+    paths = []
+    
+    def solver(root, currSum, currPath):
+        ## base cases
+        if root is None:
+            return []
+        
+        currSum += root.val
+        currPath = currPath + [root.val]
+        
+        if root.left is None and root.right is None:
+            if currSum == targetSum:
+                paths.append(currPath)
+                return True
+            else:
+                ## backtracking
+                currPath.pop()
+                return False
+        
+        left = solver(root.left, currSum, currPath)
+        right = solver(root.right, currSum, currPath)
+        
+        return left or right
+    
+    def solver1(root, currSum, currPath, paths):
+        ## base cases
+        if root is None:
+            return []
+        
+        currSum += root.val
+        currPath = currPath + [root.val]
+        
+        if not root.left and not root.right:
+            if currSum == targetSum:
+                paths.append(currPath)
+                return paths
+        
+        solver1(root.left, currSum, currPath, paths)
+        solver1(root.right, currSum, currPath, paths)
+        
+        return paths
+    
+    solver(root, 0, currPath=[])
+    
+    return paths, solver1(root, 0, currPath=[], paths=[])
+
+###############################################################################################################
+## **437. Path Sum III**
+## Given the root of a binary tree and an integer targetSum, return the number of paths where the sum of the values along the path equals targetSum.
+## Note: The path does not need to start or end at the root or a leaf, but it must go downwards (i.e., traveling only from parent nodes to child nodes).
+def pathSumIII(root: TreeNode, targetSum: int) -> int:
+    ## Naive soln works with T.C: O(n^2)
+    
+    def getCnt(node, currSum):
+        if node is None:
+            return 0
+        
+        cnt = 0
+        currSum += node.val
+        
+        if currSum == targetSum:
+            cnt += 1
+        
+        cnt += getCnt(node.left, currSum)
+        cnt += getCnt(node.right, currSum)
+        
+        return cnt 
+    
+    def dfs(root):
+        if root is None:
+            return 0
+        
+        count = getCnt(root, 0)
+        count += dfs(root.left)
+        count += dfs(root.right)
+        
+        return count
+    
+    return dfs(root)
+
+
+root = TreeNode(5)
+root.left = TreeNode(4)
+root.left.left = TreeNode(11)
+root.left.left.left = TreeNode(7)
+root.left.left.right = TreeNode(2)
+root.right = TreeNode(8)
+root.right.right = TreeNode(4)
+root.right.right.right = TreeNode(2)
+root.right.left = TreeNode(13)
+root.right.left.right = TreeNode(6)
+
+has_path = pathSumI(root, 22)
+print(has_path)
+
+all_paths = pathSumII(root, 22)
+print(all_paths)
+
+print(pathSumIII(root, 22))
