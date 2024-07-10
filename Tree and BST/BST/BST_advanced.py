@@ -19,6 +19,17 @@ def inOrderTraversal(root: TreeNode):
     
     return
 
+def preOrderTraversal(root: TreeNode):
+    ## base case
+    if root is None:
+        return
+    
+    print(root.val, end=' ')
+    preOrderTraversal(root.left)
+    preOrderTraversal(root.right)
+    
+    return
+
 ##############################################
 ## to build the tree
 ## insert at BST
@@ -254,33 +265,99 @@ def findTarget(root: TreeNode, k: int) -> bool:
     
     return solver(root)
 
-
-## let's build the tree
-root = None
-values = [50, 20, 100, 10, 40, 70, 120, 60, 80]
-for val in values:
-    root = insert(root, val)
-
-
-# root = TreeNode(2)
-# root.left = TreeNode(2)
-# root.right = TreeNode(2)
-
-root = TreeNode(20)
-root.left = TreeNode(60)
-root.left.left = TreeNode(4)
-root.left.right = TreeNode(10)
-root.right = TreeNode(80)
-root.right.left = TreeNode(8)
-root.right.right = TreeNode(100)
+## Construct BST from sorted array
+def constructBST(nums: list[int]):
+    n = len(nums) - 1
     
-# print(root.left.left.val)
-# printKthSmallest(root, 3)
-# print(isValidBST1(root))
+    def construct(start, end):
+        if start > end:
+            return None
+        
+        if start == end:
+            return TreeNode(nums[start])
+        
+        mid = (start + end) // 2
+        
+        root = TreeNode(nums[mid])
+        root.left = construct(start, mid-1)
+        root.right = construct(mid+1, end)
+        
+        return root
+    
+    return construct(0, n)
 
-# print(isValidBST(root))
-inOrderTraversal(root)
+## ########################################################
+## **1382. Balance a Binary Search Tree**
+def balanceBST(root: TreeNode) -> TreeNode:
+    nums = []
+    
+    def inOrderTraversal(root):
+        if root is None:
+            return
+        
+        inOrderTraversal(root.left)
+        nums.append(root.val)
+        inOrderTraversal(root.right)
+        
+        return
+    
+    def buildBST(nums, start, end):
+        if start > end:
+            return None
+        
+        if start == end:
+            return TreeNode(nums[start])
+        
+        mid = (start + end) // 2
+        
+        root = TreeNode(nums[mid])
+        root.left = buildBST(nums, start, mid-1)
+        root.right = buildBST(nums, mid+1, end)
+        
+        return root
+    
+    ## traversing through the skewed BST
+    inOrderTraversal(root)
+    
+    n = len(nums) - 1
+    
+    return buildBST(nums, 0, n)
 
-recoverTree(root)
-print()
-inOrderTraversal(root)
+
+nums = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+root = constructBST(nums)
+# inOrderTraversal(root)
+# print()
+# preOrderTraversal(root)
+
+print(balanceBST(root))
+
+# ## let's build the tree
+# root = None
+# values = [50, 20, 100, 10, 40, 70, 120, 60, 80]
+# for val in values:
+#     root = insert(root, val)
+
+
+# # root = TreeNode(2)
+# # root.left = TreeNode(2)
+# # root.right = TreeNode(2)
+
+# root = TreeNode(20)
+# root.left = TreeNode(60)
+# root.left.left = TreeNode(4)
+# root.left.right = TreeNode(10)
+# root.right = TreeNode(80)
+# root.right.left = TreeNode(8)
+# root.right.right = TreeNode(100)
+    
+# # print(root.left.left.val)
+# # printKthSmallest(root, 3)
+# # print(isValidBST1(root))
+
+# # print(isValidBST(root))
+# inOrderTraversal(root)
+
+# recoverTree(root)
+# print()
+# inOrderTraversal(root)

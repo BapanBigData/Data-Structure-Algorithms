@@ -1,4 +1,5 @@
 from collections import deque
+import math
 
 class TreeNode:
     
@@ -355,6 +356,28 @@ def pathSumIII(root: TreeNode, targetSum: int) -> int:
         return count
     
     return dfs(root)
+######################################################################################################################
+## **124. Binary Tree Maximum Path Sum**
+def maxPathSum(root: TreeNode) -> int:
+    mx = [-math.inf]
+    
+    def maxPath(node):
+        if node is None:
+            return 0
+        
+        left_sum = max(0, maxPath(node.left))      ## Do not consider negative path sum!!!
+        right_sum = max(0, maxPath(node.right))
+        
+        mx[0] = max(mx[0], node.val + left_sum + right_sum)
+        
+        return node.val + max(left_sum, right_sum)
+    
+    maxPath(root)
+    
+    return mx[0]
+
+#########################################################################################################################
+
 
 
 root = TreeNode(5)
@@ -368,10 +391,18 @@ root.right.right.right = TreeNode(2)
 root.right.left = TreeNode(13)
 root.right.left.right = TreeNode(6)
 
-has_path = pathSumI(root, 22)
-print(has_path)
 
-all_paths = pathSumII(root, 22)
-print(all_paths)
 
-print(pathSumIII(root, 22))
+# root = TreeNode(2)
+# root.left = TreeNode(-1)
+
+# # has_path = pathSumI(root, 22)
+# # print(has_path)
+
+# # all_paths = pathSumII(root, 22)
+# # print(all_paths)
+
+# # print(pathSumIII(root, 22))
+
+# maxSum = maxPathSum(root)
+# print(maxSum)
