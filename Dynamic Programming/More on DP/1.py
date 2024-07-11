@@ -135,7 +135,122 @@ def minimumRounds(tasks: list[int]) -> int:
     
     return min_rounds
 
+# tasks = [2,2,3,3,2,4,4,4,4,4]
+# min_rounds = minimumRounds(tasks)
+# print(min_rounds)
+##########################################################################################################################
+## **Frog Jump - With Staircase**
+def frogJump(heights: list[int]) -> int:
+    n = len(heights)
+    
+    def solveMem(memo, i):
+        ## base case
+        if i == n-1:
+            return 0
+        
+        ## check if the state is already computed
+        if memo[i] is not None:
+            return memo[i]
+        
+        res = math.inf
+        
+        if (i+1) < n:
+            res = min(res, abs(heights[i+1] - heights[i]) + solveMem(memo, i+1))
+        
+        if (i+2) < n:
+            res = min(res, abs(heights[i+2] - heights[i]) + solveMem(memo, i+2))
+        
+        ## store the computed state
+        memo[i] = res
+        
+        return memo[i]
+    
+    
+    def solveTab(n):
+        ## let's initializing dp array
+        dp = [None]*(n+1)
+        
+        ## base cases
+        dp[n] = dp[n-1] = 0
+        
+        for i in range(n-2, -1, -1):
+            res = math.inf
+            
+            if (i+1) < n:
+                res = min(res, abs(heights[i+1] - heights[i]) + dp[i+1])
+            
+            if (i+2) < n:
+                res = min(res, abs(heights[i+2] - heights[i]) + dp[i+2])
+            
+            dp[i] = res
+        
+        return dp[0]
+    
+    ## initializing the memo array
+    memo = [None]*n
+    
+    return solveMem(memo, 0), solveTab(n)
 
-tasks = [2,2,3,3,2,4,4,4,4,4]
-min_rounds = minimumRounds(tasks)
-print(min_rounds)
+## follow-up question from the above
+def frogJumpKDistance(heights: list[int], dist: int) -> int:
+    n = len(heights)
+    
+    def solveMem(memo, i):
+        ## base case
+        if i == n-1:
+            return 0
+        
+        ## check if the state is already computed
+        if memo[i] is not None:
+            return memo[i]
+        
+        res = math.inf
+        
+        for k in range(1, dist+1):
+            if (i+k) < n:
+                res = min(res, abs(heights[i+k] - heights[i]) + solveMem(memo, i+k))
+        
+        ## store the computed state
+        memo[i] = res
+        
+        return memo[i]
+    
+    ## initializing the memo array
+    memo = [None]*n
+    
+    return solveMem(memo, 0)
+
+heights = [10,20,30,10,25,5,12,9,3]
+min_energy = frogJumpKDistance(heights, 3)
+print(min_energy)
+##########################################################################################################################
+## **403. Frog Jump**
+## **Hard Level**
+def canCross(stones: list[int]) -> int:
+    
+    def solveMem(memo, curr_pos, last_jump):
+        ## base case
+        if curr_pos == stones[-1]:
+            return True
+        
+        ## check if the state is already computed
+        if (curr_pos, last_jump) in memo:
+            return memo[(curr_pos, last_jump)]
+        
+        for nxt_jump in [last_jump-1, last_jump, last_jump+1]:
+            if (nxt_jump > 0) and (curr_pos + nxt_jump) in stones:
+                if solveMem(memo, curr_pos+nxt_jump, nxt_jump):
+                    memo[(curr_pos, last_jump)] = True
+                    return memo[(curr_pos, last_jump)]
+        
+        memo[(curr_pos, last_jump)] = False
+        
+        return memo[(curr_pos, last_jump)]
+    
+    ## let's initializing a memo map
+    memo = {}
+    
+    return solveMem(memo, stones[0], 0)
+
+# stones = [0,1,3,5,6,8,12,17,23,24,29,30]
+# print(canCross(stones))
