@@ -31,7 +31,7 @@ def print_linked_list(tail):
 
 
 ## Driver code
-n = 12
+n = 21
 tail = Node(1)
 for i in range(2, n+1):
     factorial_large_number(tail, i)

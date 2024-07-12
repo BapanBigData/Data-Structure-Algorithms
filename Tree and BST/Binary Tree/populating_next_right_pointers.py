@@ -1,3 +1,5 @@
+from collections import deque
+
 class Node:
     
     def __init__(self, val, left=None, right=None, next=None) -> None:
@@ -52,7 +54,7 @@ def bfs(root: Node):
 
 # Initially, all next pointers are set to NULL.
         
-def connect(root: Node) -> Node:
+def connect1(root: Node) -> Node:
     
     def solver(root):
         if root is None:
@@ -74,6 +76,44 @@ def connect(root: Node) -> Node:
         return root
     
     return solver(root)
+#########################################################################################################################################
+## **117. Populating Next Right Pointers in Each Node II**
+# Given a binary tree
+
+# struct Node {
+#   int val;
+#   Node *left;
+#   Node *right;
+#   Node *next;
+# }
+# Populate each next pointer to point to its next right node. If there is no next right node, the next pointer should be set to NULL.
+
+# Initially, all next pointers are set to NULL.
+
+def connect2(root: Node) -> Node:
+    if root is None:
+        return None
+    
+    queue = deque()
+    queue.append(root)
+    
+    while queue:
+        n = len(queue)
+        prev = None
+        
+        for _ in range(n):
+            curr = queue.popleft()
+            
+            curr.next = prev
+            prev = curr
+            
+            if curr.right:
+                queue.append(curr.right)
+            
+            if curr.left:
+                queue.append(curr.left)
+    
+    return root
 
 
 ## building a tree
@@ -85,7 +125,7 @@ root.left.right = Node(5)
 root.right.left = Node(6)
 root.right.right = Node(7)
 
-root = connect(root)
+root = connect2(root)
 
 ## dfs
 dfs(root)

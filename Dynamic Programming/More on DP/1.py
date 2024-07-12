@@ -252,5 +252,5 @@ def canCross(stones: list[int]) -> int:
     
     return solveMem(memo, stones[0], 0)
 
-# stones = [0,1,3,5,6,8,12,17,23,24,29,30]
-# print(canCross(stones))
+stones = [0,1,3,5,6,8,12,17,23,24,29,30]
+print(canCross(stones))
