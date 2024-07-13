@@ -404,6 +404,7 @@ def printFlattenTree(head):
     return
 
 
+
 ## code to build the tree
 root = TreeNode(30)
 root.left = TreeNode(40)
@@ -434,8 +435,8 @@ root.right = TreeNode(20)
 root.right.left = TreeNode(30)
 root.right.right = TreeNode(35)
 
-head = inOrderFlattenToDLL1(root2)
-printFlattenTree(head)
+# head = inOrderFlattenToDLL1(root2)
+# printFlattenTree(head)
 
 ## level order traversal line by line
 # levelOrderTraversalLineByLine(root)

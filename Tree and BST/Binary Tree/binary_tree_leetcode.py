@@ -378,6 +378,47 @@ def maxPathSum(root: TreeNode) -> int:
 
 #########################################################################################################################
 
+########################################################################################################
+## ** Binary Tree: Maximum subset sum **
+## Given a binary tree with a value associated with each node, we need to choose a subset of these nodes such that sum of chosen nodes is maximum 
+## under a constraint that no two chosen node in subset should be directly connected that is, if we have taken a node in our sum then 
+## we can’t take its any children or parents in consideration and vice versa.
+
+def maxSubsetSum(root: TreeNode) -> int:
+    mx = [0]
+    
+    def solver(root):
+        ## base case
+        if root is None:
+            return (0, 0)
+        
+        left_incl, left_excl = solver(root.left)
+        right_incl, right_excl = solver(root.right)
+        
+        incl = root.val + left_excl + right_excl
+        excl = max(left_incl, left_excl) + max(right_incl, right_excl)
+        
+        mx[0] = max(mx[0], max(incl, excl))
+        
+        return (incl, excl)
+    
+    solver(root)
+    
+    return mx[0]
+
+
+## build the tree
+root = TreeNode(1)
+root.left = TreeNode(2)
+root.right = TreeNode(3)
+root.left.left = TreeNode(4)
+root.left.right = TreeNode(5)
+root.left.right.left = TreeNode(7)
+root.right.right = TreeNode(6)
+
+mx_sum = maxSubsetSum(root)
+print(mx_sum)
+
 
 
 root = TreeNode(5)

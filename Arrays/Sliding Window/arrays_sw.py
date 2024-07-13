@@ -46,8 +46,8 @@ def housing_binary_search(plots: list, k: int):
                 pairs.append([i+1, j])
     
     return pairs
- 
- 
+
+
 ## optimal and best soln
 def housing_sliding_window(plots: list, k: int):
     n = len(plots)
