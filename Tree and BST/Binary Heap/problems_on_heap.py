@@ -1,4 +1,5 @@
 import heapq
+import math
 
 ## ** k largest elements **
 ## ** soln using min heap **
@@ -99,6 +100,44 @@ def kClosest(nums: list[int], k: int, x: int):
 nums = [12, 16, 22, 30, 35, 39, 42, 45, 48, 50, 53, 55, 56]; k = 4; x = 35
 closest = kClosest(nums, k, x)
 print(closest)
+########################################################################################################################
+
+## ** 973. K Closest Points to Origin **
+def kClosestPoints(points: list[list[int]], k: int) -> list[list[int]]:
+    ## lets get the pairs of dist and point
+    pairs = [(math.sqrt((point[0]*point[0] + point[1]*point[1])), point) for point in points]
+    
+    ## let's heapify the pairs
+    heapq.heapify(pairs)
+    
+    res = []
+    for _ in range(k):
+        x = heapq.heappop(pairs)[-1]
+        res.append(x)
+    
+    return 
 
 
+## Max heap soln
+def kClosestPointsMaxHeap(points: list[list[int]], k: int) -> list[list[int]]:
+    ## let's solve it using Max Heap
+    ## lets get the pairs of dist and point
+    pairs = [(-math.sqrt((point[0]*point[0] + point[1]*point[1])), point) for point in points]
+    pq = pairs[:k]
+
+    ## print(pairs)
+    
+    ## let's heapify the pq
+    heapq.heapify(pq)
+
+    for dist, point in pairs[k:]:
+        if (dist > pq[0][0]):
+            heapq.heapreplace(pq, (dist, point))
+    
+    return [point for _, point in pq]
+
+
+points = [[3,3],[5,-1],[-2,4]]; k = 2
+closest = kClosestPointsMaxHeap(points, k)
+print(closest)
 
