@@ -33,6 +33,7 @@ def getSecondOrderElements(a: list[int]) -> list[int]:
         
         return slargest
 
+
     def getSecondSmallest(n, a):
         smallest, ssmallest = a[0], math.inf
         for i in range(1, n):
@@ -103,7 +104,62 @@ def removeDuplicates(nums: list[int]):
     
     return optimalSoln()
 
-nums = [-1,0,0,0,0,3,3]
-res = removeDuplicates(nums)
+# nums = [-1,0,0,0,0,3,3]
+# res = removeDuplicates(nums)
+# print(nums)
+# print(res)
+#########################################################################################################################################
+## Left rotate the given array by one place (in-place rotate)
+def leftRotate(arr: list[int]):
+    n = len(arr)
+    temp = arr[0]
+    for i in range(1, n):
+        arr[i-1] = arr[i]
+    arr[n-1] = temp
+    
+    return
+
+# arr = [1, 2, 3, 4, 5, 6]
+# leftRotate(arr)
+# print(arr)
+
+
+## left rotate by k
+
+def rotate(nums: list[int], k: int):
+    n = len(nums)
+    k = k % n
+    temp = nums[:k]
+    
+    for i in range(k, n):
+        nums[i-k] = nums[i]
+    
+    for i in range(n-k, n):
+        nums[i] = temp[i-(n-k)]
+    
+    return
+
+
+## left rotate most optimal soln
+
+def rotate(nums: list[int], k: int):
+    n = len(nums)
+    k = k % n
+    
+    def reverse(s, e):
+        while (e >= s):
+            nums[s], nums[e] = nums[e], nums[s]    
+            s += 1
+            e -= 1
+        return
+    
+    reverse(0, k-1)
+    reverse(k, n-1)
+    reverse(0, n-1)
+    
+    return
+
+
+nums = [1,2,3,4,5,6,7]; k = 3
+rotate(nums, k)
 print(nums)
-print(res)
