@@ -160,6 +160,226 @@ def rotate(nums: list[int], k: int):
     return
 
 
-nums = [1,2,3,4,5,6,7]; k = 3
-rotate(nums, k)
-print(nums)
+# nums = [1,2,3,4,5,6,7]; k = 3
+# rotate(nums, k)
+# print(nums)
+##########################################################################################################################
+
+## Right Rotate the given array by one place
+def rightRotate(nums: list[int]): 
+    n = len(nums)
+    temp = nums[n-1]
+    
+    for i in range(n-2, -1, -1):
+        nums[i+1] = nums[i]
+    
+    nums[0] = temp
+    
+    return
+
+# nums = [1, 2, 3, 4, 5, 6, 7]
+# rightRotate(nums)
+# print(nums)
+
+######################################################################################################################
+
+## Right roatation by k places (in-place)
+def rightRotateByK(nums: list[int], k: int):
+    n = len(nums)
+    k = k % n
+    temp = nums[(n-k):]
+    for i in range(n-k-1, -1, -1):
+        nums[i+k] = nums[i]
+    
+    for i in range(k):
+        nums[i] = temp[i]
+    
+    return
+
+
+## Right rotate optimal soln
+
+def rightRotateByK(nums: list[int], k: int):
+    n = len(nums)
+    k = k % n
+    
+    def reverse(s, e):
+        while (e >= s):
+            nums[s], nums[e] = nums[e], nums[s]
+            
+            s += 1
+            e -= 1
+        return
+    
+    reverse(0, n-k-1)
+    reverse(n-k, n-1)
+    reverse(0, n-1)
+    
+    return
+
+# nums = [1, 2, 3, 4, 5, 6, 7]; k=3
+# rightRotateByK(nums, 3)
+# print(nums)
+#######################################################################################################################
+## Moves zeros to the end
+## ** 283. Move Zeroes **
+def moveZeroes(nums: list[int]):
+    
+    def bruteForce(nums):
+        n = len(nums)
+        
+        temp = []
+        for i in range(n):
+            if (nums[i] != 0):
+                temp.append(nums[i])
+        
+        nz = len(temp)
+        for i in range(nz):
+            nums[i] = temp[i]
+        
+        for i in range(nz, n):
+            nums[i] = 0
+        
+        return
+    
+    def optimal(nums):
+        n = len(nums)
+        
+        j = -1
+        for i in range(n):
+            if (nums[i] == 0):
+                j = i
+                break
+            
+        ## if there are no zeros
+        if j == -1:
+            return
+        
+        for i in range(j+1, n):
+            if nums[i] != 0:
+                ## swap
+                nums[i], nums[j] = nums[j], nums[i]
+                j += 1
+        
+        return
+    
+    optimal(nums)
+    
+    return
+
+# nums = [1,2,3,1]
+# moveZeroes(nums)
+# print(nums)
+############################################################################################################################
+## Union of two sorted arrays
+## ** Variation of merge two sorted array **
+
+def findUnion(arr1: list[int], arr2: list[int]):
+    
+    def bruteForce(arr1, arr2):
+        s = set()
+        for e in arr1:
+            s.add(e)
+        
+        for f in arr2:
+            s.add(f)
+        
+        res = list(s)
+        res.sort()
+        
+        return res
+    
+    
+    def optimal(arr1, arr2):
+        n1 = len(arr1)
+        n2 = len(arr2)
+        
+        i, j = 0, 0
+        unionArr = []
+        
+        while (i < n1) and (j < n2):
+            if (arr1[i] <= arr2[j]):
+                if (not unionArr) or (unionArr[-1] != arr1[i]):
+                    unionArr.append(arr1[i])
+                
+                i += 1
+                
+            else:
+                if (not unionArr) or (unionArr[-1] != arr2[j]):
+                    unionArr.append(arr2[j])
+                
+                j += 1
+        
+        
+        while (j < n2):
+            if (not unionArr) or (unionArr[-1] != arr2[j]):
+                    unionArr.append(arr2[j])
+                
+            j += 1
+        
+        while (i < n1):
+            if (not unionArr) or (unionArr[-1] != arr1[i]):
+                    unionArr.append(arr1[i])
+                
+            i += 1
+        
+        return unionArr
+    
+    return optimal(arr1, arr2)
+
+
+# arr1 = [2, 2, 3, 4, 5]; arr2 = [1, 1, 2, 3, 4]
+# u = findUnion(arr1, arr2)
+# print(u)
+
+##################################################################################################################
+## Intersection of two sorted arrays
+
+def findIntersection(nums1: list[int], nums2: list[int]):
+    
+    def bruteForce(nums1, nums2):
+        n1, n2 = len(nums1), len(nums2)
+        visited = [0]*n2
+        ans = set()
+        
+        for i in range(n1):
+            for j in range(n2):
+                if (nums1[i] == nums2[j]) and (not visited[j]):
+                    ans.append(nums1[i])
+                    visited[j] = 1
+                    break
+                
+                if (nums2[j] > nums1[i]):
+                    break
+        
+        return ans
+    
+    
+    def optimal(nums1, nums2):
+        n1, n2 = len(nums1), len(nums2)
+        i, j = 0, 0
+        ans = set()
+        
+        while (i < n1) and (j < n2):
+            if (nums1[i] < nums2[j]):
+                i += 1
+                
+            elif (nums2[j] < nums1[i]):
+                j += 1
+                
+            else: ## nums1[i] == nums2[j]
+                ans.add(nums1[i])
+                
+                i += 1
+                j += 1
+        
+        return ans
+    
+    return optimal(nums1, nums2)
+
+
+arr1 = [1, 2, 2, 3, 3, 4, 5, 6]; arr2 = [2, 3, 3, 5, 6, 6, 7]
+intersect = findIntersection(arr1, arr2)
+print(intersect)
+
+
