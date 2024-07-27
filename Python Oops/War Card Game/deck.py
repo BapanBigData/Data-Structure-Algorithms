@@ -1,3 +1,4 @@
+"""Requires imports"""
 import random
 from collections import deque
 from suit import Suit
@@ -11,7 +12,7 @@ class Deck:
     def __init__(self, isEmpty=False) -> None:
         self._cards = deque()
         
-        if isEmpty == True:
+        if not isEmpty:
             self.build()
     
     @property

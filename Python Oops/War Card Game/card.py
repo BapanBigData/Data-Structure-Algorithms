@@ -1,8 +1,3 @@
-import sys
-
-# Ensure the output is in UTF-8 encoding
-sys.stdout.reconfigure(encoding='utf-8')
-
 
 class Card:
     

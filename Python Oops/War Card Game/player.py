@@ -10,6 +10,10 @@ class Player:
     def isComputer(self):
         return self._isComputer
     
+    @property
+    def deck(self):
+        return self._deck
+    
     def hasEmptyDeck(self):
         return self._deck.size == 0
     
