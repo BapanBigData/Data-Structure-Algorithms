@@ -6,7 +6,6 @@ from card import Card
 
 
 class Deck:
-    
     SUITS = ("clubs", "diamonds", "hearts", "spades")
     
     def __init__(self, isEmpty=False) -> None:
