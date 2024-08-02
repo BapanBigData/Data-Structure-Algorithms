@@ -176,3 +176,141 @@ nums = [2, 0, 0, 0, 3]
 k = 3
 res = numberSubArrays(nums, k)
 print(res)
+
+############################################################
+
+# Two sum problem
+
+
+def two_sum(nums: list[int], target: int):
+    n = len(nums)
+    
+    # initialize a dict
+    mp = dict()
+
+    for i in range(n):
+        if (target - nums[i]) in mp:
+            return [i, mp[target-nums[i]]]
+        else:
+            mp[nums[i]] = i
+    
+    return [-1, -1]
+
+
+nums = [2, 6, 5, 8, 11]
+target = 14
+res = two_sum(nums, target)
+print(res)
+
+###########################################################
+
+# Is there exists the target sum
+
+
+def is_exists_two_sum(nums: list[int], target: int):
+    # sort the given array
+    nums.sort()
+    
+    n = len(nums)
+    i, j = 0, n-1
+    
+    while (j > i):
+        if (nums[i] + nums[j] == target):
+            return True
+        
+        if (nums[i] + nums[j]) > target:
+            j -= 1
+        else:
+            i += 1
+            
+    return False    
+
+
+nums = [2, 6, 5, 8, 11]
+target = 14
+res = is_exists_two_sum(nums, target)
+print(res)
+
+#####################################################################
+
+# Sort 0's, 1's & 2's / sort colours
+
+
+def sort_colors(nums: list[int]):
+    
+    n = len(nums)
+    cnt_0 = 0
+    cnt_1 = 0
+    cnt_2 = 0
+
+    for i in range(n):
+        if nums[i] == 0:
+            cnt_0 += 1
+        elif nums[i] == 1:
+            cnt_1 += 1
+        else:
+            cnt_2 += 1
+            
+    for i in range(cnt_0):
+        nums[i] = 0
+    
+    for i in range(cnt_0, cnt_0 + cnt_1):
+        nums[i] = 1
+    
+    for i in range(cnt_0 + cnt_1, cnt_0 + cnt_1 + cnt_2):
+        nums[i] = 2
+    
+    return
+
+
+nums = [0, 1, 2, 0, 1, 2, 1, 0]
+sort_colors(nums)
+print(nums)
+###############################################################
+
+# 169. Majority Element
+# The majority element is the element that appears more than ⌊n / 2⌋ times
+# You may assume that the majority element always exists in the array.
+
+
+def majority_element(nums: list[int]):
+    n = len(nums)
+    
+    def solve(n):
+        # initialize a map (dict)
+        mp = {}
+        
+        for num in nums:
+            if num in mp:
+                mp[num] += 1
+            else:
+                mp[num] = 1
+            
+            if (mp[num] > n // 2):
+                return num
+                
+        return -1
+    
+    # Moore's voting algo (Most optimal soln)
+    
+    def moores_voting_algo():
+        cnt = 0
+        ele = None
+        
+        for num in nums:
+            if (cnt == 0):
+                ele = num
+                cnt = 1
+            elif (num == ele):
+                cnt += 1
+            else:
+                cnt -= 1
+        
+        return ele
+    
+    return solve(n), moores_voting_algo()
+
+
+nums = [3, 3, 4]
+major = majority_element(nums)
+print(major)
