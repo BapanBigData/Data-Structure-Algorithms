@@ -1,0 +1,3 @@
+Binary Search:
+    1. Search in Rotated Sorted array
+
