@@ -77,7 +77,84 @@ def length_of_longest_substring(s: str) -> int:
     
     return solver(), optimal_solver()
 
-s = "abba"
-res = length_of_longest_substring(s)
+# s = "abba"
+# res = length_of_longest_substring(s)
+# print(res)
+########################################################################################################################
+
+# 1004. Max Consecutive Ones III
+
+def longest_ones(nums: list[int], k: int):
+    n = len(nums)
+    
+    def solver():
+        max_len = 0
+        
+        for i in range(n):
+            zeros = 0
+            for j in range(i, n):
+                if (nums[j] == 0):
+                    zeros += 1
+                
+                if (zeros <= k):
+                    curr_len = j - i + 1
+                    max_len = max(max_len, curr_len)
+                else:
+                    break
+        
+        return max_len
+    
+    def better_solver():
+        max_len = 0
+        zeros = 0
+        l, r = 0, 0
+        
+        while (r < n):
+            if (nums[r] == 0):
+                zeros += 1
+            
+            while (zeros > k):
+                if (nums[l] == 0):
+                    zeros -= 1
+                    
+                l += 1
+            
+            if (zeros <= k):
+                curr_len = r - l + 1
+                max_len = max(max_len, curr_len)
+            
+            r += 1
+        
+        return max_len
+    
+    
+    def optimal_solver():
+        max_len = 0
+        zeros = 0
+        l, r = 0, 0
+        
+        while (r < n):
+            if (nums[r] == 0):
+                zeros += 1
+            
+            if (zeros > k):
+                if (nums[l] == 0):
+                    zeros -= 1
+                    
+                l += 1
+            
+            if (zeros <= k):
+                curr_len = r - l + 1
+                max_len = max(max_len, curr_len)
+            
+            r += 1
+        
+        return max_len
+    
+    return better_solver(), optimal_solver()
+
+
+nums = [1,1,1,0,0,0,1,1,1,1,0]; k = 2
+res = longest_ones(nums, k)
 print(res)
 
