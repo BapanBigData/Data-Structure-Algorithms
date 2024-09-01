@@ -154,7 +154,95 @@ def longest_ones(nums: list[int], k: int):
     return better_solver(), optimal_solver()
 
 
-nums = [1,1,1,0,0,0,1,1,1,1,0]; k = 2
-res = longest_ones(nums, k)
-print(res)
+# nums = [1,1,1,0,0,0,1,1,1,1,0]; k = 2
+# res = longest_ones(nums, k)
+# print(res)
 
+#########################################################################################################
+
+# 904. Fruit Into Baskets
+
+def total_fruits(fruits: list[int]) -> int:
+    n = len(fruits)
+    
+    def solver():
+        max_len = 0
+        for i in range(n):
+            fruit_set = set()
+            for j in range(i, n):
+                fruit_set.add(fruits[j])
+                
+                if len(fruit_set) <= 2:
+                    curr_len = j - i + 1
+                    max_len = max(max_len, curr_len)
+                else:
+                    break
+                
+        return max_len
+    
+    
+    def better_solver():
+        # much better soln then brute force which works on T.C: O(2n)
+        # extra space: O(3) ~ constant
+        
+        max_len = 0
+        mpp = dict()
+        
+        l, r = 0, 0
+        while (r < n):
+            if fruits[r] in mpp:
+                mpp[fruits[r]] += 1
+            else:
+                mpp[fruits[r]] = 1
+            
+            while (len(mpp) > 2):
+                mpp[fruits[l]] -= 1
+                
+                if mpp[fruits[l]] == 0:
+                    mpp.pop(fruits[l])
+                
+                l += 1
+            
+            if (len(mpp) <= 2):
+                curr_len = r - l + 1
+                max_len = max(curr_len, max_len)
+            
+            r += 1
+        
+        return max_len
+
+    
+    def optimal_solver():
+        # Optimal soln which works on T.C: O(n)
+        max_len = 0
+        mpp = dict()
+        
+        l, r = 0, 0
+        while (r < n):
+            if fruits[r] in mpp:
+                mpp[fruits[r]] += 1
+            else:
+                mpp[fruits[r]] = 1
+            
+            if (len(mpp) > 2):
+                mpp[fruits[l]] -= 1
+                
+                if mpp[fruits[l]] == 0:
+                    mpp.pop(fruits[l])
+                
+                l += 1
+            
+            if (len(mpp) <= 2):
+                curr_len = r - l + 1
+                max_len = max(curr_len, max_len)
+            
+            r += 1
+        
+        return max_len
+    
+    return better_solver(), optimal_solver()
+
+
+fruits = [1,2,3,2,2]
+res = total_fruits(fruits)
+print(res)
