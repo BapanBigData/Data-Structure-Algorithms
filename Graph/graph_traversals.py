@@ -88,24 +88,80 @@ def number_of_connected_components_undirected_graph(graph: Graph) -> int:
             
     return cnt
 
+###########################################################################################################
 
+# Depth first search (dfs)
+
+def dfs_utils(adj, visited, source):
+    visited[source] = True
+    print(source, end=' ')
+    
+    for u in adj[source]:
+        if not visited[u]:
+            dfs_utils(adj, visited, u)
+    return
+
+
+def dfs_connected(graph: Graph, source: int):
+    adj_lst = graph.adj
+    vertices = len(adj_lst)
+    visited = [False]*vertices
+    
+    dfs_utils(adj=adj_lst, visited=visited, source=source)
+
+
+# dfs generalized
+
+def dfs(graph: Graph):
+    adj_lst = graph.adj
+    vertices = len(adj_lst)
+    visited = [False]*vertices
+    
+    for vertex in range(vertices):
+        if not visited[vertex]:
+            dfs_utils(adj=adj_lst, visited=visited, source=vertex)
+
+
+# number of connected components in an undirected graph
+
+def connected_components(graph: Graph):
+    adj_lst = graph.adj
+    vertices = len(adj_lst)
+    visited = [False]*vertices
+    
+    def traverse(source):
+        visited[source] = True
+        
+        for u in adj_lst[source]:
+            if not visited[u]:
+                traverse(u)
+        return
+    
+    cnt = 0
+    
+    for vertex in range(vertices):
+        if not visited[vertex]:
+            traverse(vertex)
+            cnt += 1
+    
+    return cnt
 
 
 
 # driver code (undirected graph)
-graph = Graph(6)
-graph.add_edge(0, 1)
-graph.add_edge(0, 2)
-graph.add_edge(0, 5)
-graph.add_edge(1, 3)
-graph.add_edge(2, 4)
-graph.add_edge(3, 5)
-graph.add_edge(4, 5)
+# graph = Graph(6)
+# graph.add_edge(0, 1)
+# graph.add_edge(0, 2)
+# graph.add_edge(0, 5)
+# graph.add_edge(1, 3)
+# graph.add_edge(2, 4)
+# graph.add_edge(3, 5)
+# graph.add_edge(4, 5)
 
-# graph.display()
+# # graph.display()
 
 
-# let's take a dis-connected graph
+# # let's take a dis-connected graph
 graph = Graph(7)
 graph.add_edge(0, 1)
 graph.add_edge(0, 2)
@@ -136,7 +192,28 @@ graph.add_edge(5, 6)
 # graph.add_edge(6, 7, undirected=False)
 
 # graph.display()
-print(number_of_connected_components_undirected_graph(graph))
+# print(number_of_connected_components_undirected_graph(graph))
+
+# let's initialize a connected and undirected graph
+# graph = Graph(7)
+# graph.add_edge(0, 1)
+# graph.add_edge(0, 4)
+# graph.add_edge(1, 2)
+# graph.add_edge(2, 3)
+# graph.add_edge(4, 5)
+# graph.add_edge(4, 6)
+
+
+# # let initialize a connected directed graph
+# graph = Graph(4)
+# graph.add_edge(0, 1, undirected=False)
+# graph.add_edge(0, 2, undirected=False)
+# graph.add_edge(1, 2, undirected=False)
+# graph.add_edge(2, 1, undirected=False)
+# graph.add_edge(2, 3, undirected=False)
+# graph.add_edge(3, 1, undirected=False)
+
+print(connected_components(graph))
 
 
 
