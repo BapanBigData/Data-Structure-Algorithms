@@ -213,10 +213,24 @@ graph.add_edge(5, 6)
 # graph.add_edge(2, 3, undirected=False)
 # graph.add_edge(3, 1, undirected=False)
 
-print(connected_components(graph))
+# print(connected_components(graph))
 
 
+graph = Graph(6)
+graph.add_edge(0, 1)
+graph.add_edge(1, 2)
+graph.add_edge(1, 3)
+graph.add_edge(1, 4)
+graph.add_edge(3, 5)
+graph.add_edge(4, 5)
 
+print(graph.adj)
+
+dfs(graph)
+
+print()
+
+bfs(graph.adj)
 
 
 
