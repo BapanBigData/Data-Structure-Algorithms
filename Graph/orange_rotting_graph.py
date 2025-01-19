@@ -10,6 +10,8 @@ from collections import deque
 
 # Return the minimum number of minutes that must elapse until no cell has a fresh orange. If this is impossible, return -1.
 
+# BFS (Breadth-First Search)
+
 
 def oranges_rotting(grid: list[list[int]]) -> int:
     n, m = len(grid), len(grid[0])
